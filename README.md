@@ -1,7 +1,10 @@
 # `terraform-provider-kafka`
-[![CircleCI](https://circleci.com/gh/Mongey/terraform-provider-kafka.svg?style=svg)](https://circleci.com/gh/Mongey/terraform-provider-kafka)
 
 A [Terraform][1] plugin for managing [Apache Kafka][2].
+
+## Warning
+
+For now, this fork is maintained strictly for the internal usage for [Sprout](https://www.sproutfi.com/). Use this fork at your own discretion.
 
 ## Contents
 
