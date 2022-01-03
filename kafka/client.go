@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"sync"
 	"time"
 
 	"github.com/Shopify/sarama"
@@ -26,6 +27,7 @@ type Client struct {
 	config        *Config
 	supportedAPIs map[int]int
 	topics        map[string]void
+	mu            sync.Mutex
 }
 
 func NewClient(config *Config) (*Client, error) {
@@ -472,6 +474,8 @@ func (client *Client) ReadTopic(name string, refreshMetadata bool) (Topic, error
 	}
 
 	if refreshMetadata {
+		log.Printf("[DEBUG] Acquiring refresh lock")
+		client.mu.Lock()
 		log.Printf("[DEBUG] Refreshing metadata")
 		err := c.RefreshMetadata()
 		if err != nil {
@@ -482,6 +486,8 @@ func (client *Client) ReadTopic(name string, refreshMetadata bool) (Topic, error
 		if err != nil {
 			return topic, err
 		}
+		log.Printf("[DEBUG] Releasing refresh lock")
+		client.mu.Unlock()
 	} else {
 		log.Printf("[DEBUG] skipping metadata refresh")
 	}
